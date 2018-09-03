@@ -1,0 +1,56 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>WebSocket</title>
+    <script type="text/javascript">
+        var webSocket;
+        if (!window.WebSocket) {
+            window.WebSocket = window.MozWebSocket;
+
+        }
+        if (window.WebSocket) {
+            webSocket = new WebSocket("ws://localhost:8888/webSocket");
+            webSocket.onmessage = function (event) {
+                var ta = document.getElementById('responseContext');
+                ta.value += event.data + '\r\n'
+            };
+            webSocket.onopen = function (event) {
+                var ta = document.getElementById('responseContext');
+                ta.value = "您当前的浏览器支持websocket\r\n"
+            };
+            webSocket.onclose = function (event) {
+                var ta = document.getElementById('responseContext');
+                ta.value = "";
+                ta.value = "链接已经关闭"
+            }
+        } else {
+            alert("您的浏览器不支持webSocket")
+        }
+        function send(message) {
+            if (!window.webSocket) {
+                return;
+            }
+            if (webSocket.readyState === WebSocket.OPEN) {
+                webSocket.send(message)
+            } else {
+                alert('webSocket链接没有建立')
+            }
+        }
+    </script>
+</head>
+<body>
+<form onsubmit="return false">
+    <label>
+        <input type="text" name="message"><br><br>
+    </label>
+    <input type="button" value="发送请求消息" onclick="send(this.form.message.value)">
+    <hr color="red"/>
+    <h2>
+        <label>
+            客户端接收服务端返回的应答消息<br><br>
+            <textarea id="responseContext" style="width: 1024px; height: 300px"></textarea>
+        </label>
+    </h2>
+</form>
+</body>
+</html>
