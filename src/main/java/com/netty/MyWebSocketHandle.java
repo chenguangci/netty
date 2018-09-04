@@ -12,6 +12,7 @@ import io.netty.handler.codec.http.websocketx.*;
 import io.netty.util.CharsetUtil;
 
 import java.util.Date;
+import java.util.Iterator;
 
 /**
  * 接收/处理/响应客户端webSocket请求的核心处理类
@@ -102,7 +103,9 @@ public class MyWebSocketHandle extends SimpleChannelInboundHandler<Object> {
         System.out.println("服务端收到消息 ===>>> " + request);
         TextWebSocketFrame textWebSocketFrame = new TextWebSocketFrame(new Date().toString() + context.channel().id() + " ===>>> " + request);
         //群发，服务端向每个客户端发送数据
-        NettyConfig.group.writeAndFlush(textWebSocketFrame);
+//        NettyConfig.group.writeAndFlush(textWebSocketFrame);
+        //只对相应的客户端发送数据
+        NettyConfig.group.find(context.channel().id()).writeAndFlush(textWebSocketFrame);
     }
 
     /**

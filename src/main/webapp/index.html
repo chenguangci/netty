@@ -6,7 +6,6 @@
         var webSocket;
         if (!window.WebSocket) {
             window.WebSocket = window.MozWebSocket;
-
         }
         if (window.WebSocket) {
             webSocket = new WebSocket("ws://localhost:8888/webSocket");
