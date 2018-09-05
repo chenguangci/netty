@@ -1,4 +1,9 @@
-
-server:
-  address: localhost
-  port: 8080
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/view/
+      suffix: .html
+  freemarker:
+    suffix: .html
+    template-loader-path: /WEB-INF/view/
+    charset: UTF-8

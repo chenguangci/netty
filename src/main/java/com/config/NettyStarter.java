@@ -40,6 +40,6 @@ public class NettyStarter implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments applicationArguments) throws Exception {
-        init();
+//        init();
     }
 }

@@ -1,9 +1,10 @@
+var webSocket;
 function send(message) {
     if (!window.webSocket) {
         return;
     }
     if (webSocket.readyState === WebSocket.OPEN) {
-        webSocket.send(message)
+        webSocket.send(message + '|' + '1')
     } else {
         alert('webSocket链接没有建立')
     }
@@ -11,12 +12,11 @@ function send(message) {
 
 //开启连接
 function openWebSocket() {
-    var webSocket;
     if (!window.WebSocket) {
         window.WebSocket = window.MozWebSocket;
     }
     if (window.WebSocket) {
-        webSocket = new WebSocket("ws://localhost:8888/webSocket");
+        webSocket = new WebSocket("ws://localhost:8080/webSocket");
         webSocket.onmessage = function (event) {
             var ta = document.getElementById('responseContext');
             ta.value += event.data + '\r\n'
