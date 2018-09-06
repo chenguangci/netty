@@ -3,8 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script type="text/javascript"></script>
-    <script src="/js/websocket.js"></script>
+    <script type="text/javascript">
+        if (!window.WebSocket) {
+            window.WebSocket = window.MozWebSocket;
+        }
+        if (window.WebSocket) {
+            webSocket = new WebSocket("ws://localhost:8080/webSocket");
+            webSocket.onmessage = function (event) {
+                var ta = document.getElementById('responseContext');
+                ta.value += event.data + '\r\n'
+            };
+            webSocket.onopen = function (event) {
+                var ta = document.getElementById('responseContext');
+                ta.value = "您当前的浏览器支持websocket\r\n";
+            };
+            webSocket.onclose = function (event) {
+                var ta = document.getElementById('responseContext');
+                ta.value = "";
+                ta.value = "链接已经关闭"
+            }
+        } else {
+            alert("您的浏览器不支持webSocket")
+        }
+    </script>
+    <!--<script src="/js/websocket.js"></script>-->
 </head>
 <body>
 <div>

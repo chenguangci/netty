@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 /**
  * 实现ApplicationRunner接口，在容器启动后执行特定方法
  */
-@Component
+//@Component
 public class NettyStarter implements ApplicationRunner {
 
     /**
@@ -40,6 +40,6 @@ public class NettyStarter implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments applicationArguments) throws Exception {
-//        init();
+        init();
     }
 }

@@ -7,3 +7,5 @@ spring:
     suffix: .html
     template-loader-path: /WEB-INF/view/
     charset: UTF-8
+
+

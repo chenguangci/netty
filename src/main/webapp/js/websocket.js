@@ -16,7 +16,7 @@ function openWebSocket() {
         window.WebSocket = window.MozWebSocket;
     }
     if (window.WebSocket) {
-        webSocket = new WebSocket("ws://localhost:8080/webSocket");
+        webSocket = new WebSocket("ws://localhost:8080/change-notice");
         webSocket.onmessage = function (event) {
             var ta = document.getElementById('responseContext');
             ta.value += event.data + '\r\n'
@@ -24,8 +24,6 @@ function openWebSocket() {
         webSocket.onopen = function (event) {
             var ta = document.getElementById('responseContext');
             ta.value = "您当前的浏览器支持websocket\r\n";
-            var btn = document.getElementById('button');
-            btn.disable()
         };
         webSocket.onclose = function (event) {
             var ta = document.getElementById('responseContext');

@@ -11,6 +11,7 @@ import io.netty.handler.codec.http.*;
 import io.netty.handler.codec.http.websocketx.*;
 import io.netty.util.CharsetUtil;
 
+import javax.websocket.Session;
 import java.util.Date;
 import java.util.Iterator;
 
@@ -24,17 +25,10 @@ public class MyWebSocketHandle extends SimpleChannelInboundHandler<Object> {
     private static final String WEB_SOCKET_URL = "ws://localhost:8888/webSocket";
 
     /*
-     * 服务端处理客户端webSocket请求的核心方法
-     */
-
-
-
-
-    /*
      * 客户端与服务器端创建链接的时候调用
      */
     @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+    public void channelActive(ChannelHandlerContext ctx) {
         NettyConfig.group.add(ctx.channel());
         System.out.println("客户端与服务器端链接开启......");
     }
@@ -43,7 +37,7 @@ public class MyWebSocketHandle extends SimpleChannelInboundHandler<Object> {
      * 客户端与服务器端断开链接的时候调用
      */
     @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+    public void channelInactive(ChannelHandlerContext ctx) {
         NettyConfig.group.remove(ctx.channel());
         System.out.println("客户端与服务器端链接关闭......");
     }
@@ -52,7 +46,7 @@ public class MyWebSocketHandle extends SimpleChannelInboundHandler<Object> {
      * 服务端接收客户端发来的请求结束之后调用
      */
     @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+    public void channelReadComplete(ChannelHandlerContext ctx) {
         ctx.flush();
     }
 
@@ -60,7 +54,7 @@ public class MyWebSocketHandle extends SimpleChannelInboundHandler<Object> {
      * 工程出现异常时候调用
      */
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         //打印异常
         cause.printStackTrace();
         //关闭Channel
@@ -101,11 +95,17 @@ public class MyWebSocketHandle extends SimpleChannelInboundHandler<Object> {
         //返回应答
         String request = ((TextWebSocketFrame)frame).text();
         System.out.println("服务端收到消息 ===>>> " + request);
+
+        /*
+         * 核心功能：处理消息
+         */
         TextWebSocketFrame textWebSocketFrame = new TextWebSocketFrame(new Date().toString() + context.channel().id() + " ===>>> " + request);
         //群发，服务端向每个客户端发送数据
 //        NettyConfig.group.writeAndFlush(textWebSocketFrame);
         //只对相应的客户端发送数据
         NettyConfig.group.find(context.channel().id()).writeAndFlush(textWebSocketFrame);
+        /*
+         */
     }
 
     /**
@@ -114,7 +114,7 @@ public class MyWebSocketHandle extends SimpleChannelInboundHandler<Object> {
      * @param request
      */
     private void handHttpRequest(ChannelHandlerContext context, FullHttpRequest request) {
-        if (!request.decoderResult().isSuccess() || !("websocket".equals(request.headers().get("Upgrade")))) {
+        if (!request.decoderResult().isSuccess() || !("websocket".contentEquals(request.headers().get("Upgrade")))) {
             sendHttpResponse(context, request, new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.BAD_REQUEST));
             return;
         }
