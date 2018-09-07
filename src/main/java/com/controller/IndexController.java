@@ -1,6 +1,6 @@
 package com.controller;
 
-import com.bean.Result;
+import com.dto.Result;
 import com.bean.SessionIdMap;
 import com.bean.ToUser;
 import org.springframework.stereotype.Controller;
@@ -30,9 +30,7 @@ public class IndexController {
     public ModelAndView index(@RequestParam("name")String name, HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.setAttribute("id", name);
-        if (!SessionIdMap.sessionIds.contains(name)) {
-            SessionIdMap.sessionIds.add(Integer.valueOf(name));
-        }
+        SessionIdMap.sessionIds.add(Integer.valueOf(name));
         ModelAndView view = new ModelAndView("chat");
         view.addObject("userId", name);
         return view;

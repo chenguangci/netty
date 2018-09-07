@@ -22,5 +22,5 @@ function updateList() {
 function send(fromId, id, toId) {
     var message = document.getElementById(id);
     console.log('................'+message.value);
-    stompClient.send("/beiyi/welcome", {}, JSON.stringify({'fromId' : fromId, 'message' : message.value, 'toId' : toId }));
+    stompClient.send("/client/welcome", {}, JSON.stringify({'fromId' : fromId, 'message' : message.value, 'toId' : toId }));
 }

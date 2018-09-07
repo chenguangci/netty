@@ -1,4 +1,4 @@
-package com.bean;
+package com.dto;
 
 public class Result<T> {
     private T data;

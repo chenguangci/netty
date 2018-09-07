@@ -31,7 +31,7 @@
                     var ta = document.getElementById('responseContext');
                     ta.value += response.body + '\r\n'
                 });
-                // stompClient.send("/beiyi/getServerMsg", {});
+                // stompClient.send("/client/getServerMsg", {});
             });
         } else {
             alert("您的浏览器不支持webSocket")

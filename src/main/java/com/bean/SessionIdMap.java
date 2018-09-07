@@ -1,8 +1,8 @@
 package com.bean;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class SessionIdMap {
-    public static final List<Integer> sessionIds = new ArrayList<>();
+    public static final Set<Integer> sessionIds = new HashSet<>();
 }
