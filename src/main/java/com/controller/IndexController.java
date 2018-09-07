@@ -1,9 +1,16 @@
 package com.controller;
 
+import com.bean.Result;
+import com.bean.SessionIdMap;
+import com.bean.ToUser;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping
@@ -20,9 +27,29 @@ public class IndexController {
     }
 
     @RequestMapping(value = "/index")
-    public ModelAndView index(@RequestParam("name")String name) {
+    public ModelAndView index(@RequestParam("name")String name, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.setAttribute("id", name);
+        if (!SessionIdMap.sessionIds.contains(name)) {
+            SessionIdMap.sessionIds.add(Integer.valueOf(name));
+        }
         ModelAndView view = new ModelAndView("chat");
         view.addObject("userId", name);
         return view;
+    }
+
+    @RequestMapping(value = "/updateList", method = RequestMethod.GET)
+    @ResponseBody
+    public Result updateList(@SessionAttribute(value = "id")int id) {
+        List<ToUser> users = new ArrayList<>();
+        for (int toId : SessionIdMap.sessionIds) {
+//            if (toId != id) {
+                ToUser user = new ToUser();
+                user.setToId(toId);
+                user.setFromId(id);
+                users.add(user);
+//            }
+        }
+        return new Result<>(users, true);
     }
 }

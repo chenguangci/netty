@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="https://cdn.bootcss.com/sockjs-client/1.1.4/sockjs.min.js"></script>
-    <script src="https://cdn.bootcss.com/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="/js/sock_js.js"></script>
+    <script src="/js/stomp.js"></script>
+    <script src="/js/update.js"></script>
     <script type="text/javascript">
         var userId = [[${userId}]];
         if (!window.WebSocket) {
@@ -23,32 +24,38 @@
                 });
                 //4通过stompClient.subscribe（）订阅服务器的目标是'/user/' + userId + '/msg'接收一对一的推送消息,其中userId由服务端传递过来,用于表示唯一的用户,通过此值将消息精确推送给一个用户
                 stompClient.subscribe('/user/' + userId + '/msg', function(response){
-                    console.log(response);
+                    var ta = document.getElementById('responseContext');
+                    ta.value += response.body + '\r\n'
                 });
+                stompClient.subscribe('/topic/server', function(response){
+                    var ta = document.getElementById('responseContext');
+                    ta.value += response.body + '\r\n'
+                });
+                // stompClient.send("/beiyi/getServerMsg", {});
             });
         } else {
             alert("您的浏览器不支持webSocket")
         }
-        function send(message) {
-            stompClient.send("/beiyi/welcome", {}, JSON.stringify({'id' : 100, 'message': message }));
-        }
     </script>
 </head>
 <body>
-<div>
-    <input type="button" id="open" value="开启websocket" onclick="openWebSocket()">
-</div>
 <div style="padding-top: 30px">
-    <div style="float: left;">
-        <h2>发送消息</h2>
-        <form onsubmit="return false">
-            <label>
-                <input type="text" name="message" style="height: 60px"><br><br>
-            </label>
-            <input type="button" value="发送请求消息" onclick="send(this.form.message.value)">
-        </form>
+    <div>
+        <input type="button" id="open" value="刷新对话列表" onclick="updateList()">
     </div>
-    <div style="padding-left: 300px">
+    <div id="char_list" style="float: left;">
+        <h2>发送消息</h2>
+    </div>
+    <!--<div style="float: left;">-->
+        <!--<h2>发送消息</h2>-->
+        <!--<form onsubmit="return false">-->
+            <!--<label>-->
+                <!--<input type="text" name="message" style="height: 60px"><br><br>-->
+            <!--</label>-->
+            <!--<input type="button" value="发送请求消息" onclick="send(this.form.message.value)">-->
+        <!--</form>-->
+    <!--</div>-->
+    <div style="padding-left: 600px">
         <h2>
             <label>
                 接收到的消息<br><br>

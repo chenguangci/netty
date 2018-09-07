@@ -4,15 +4,25 @@ package com.bean;
  * 封装消息实体
  */
 public class ToUser {
-    private int id;
+    private int fromId;
     private String message;
+    private int toId;
 
-    public int getId() {
-        return id;
+    @Override
+    public String toString() {
+        return "ToUser{" +
+                "fromId=" + fromId +
+                ", message='" + message + '\'' +
+                ", toId=" + toId +
+                '}';
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public int getFromId() {
+        return fromId;
+    }
+
+    public void setFromId(int fromId) {
+        this.fromId = fromId;
     }
 
     public String getMessage() {
@@ -23,11 +33,11 @@ public class ToUser {
         this.message = message;
     }
 
-    @Override
-    public String toString() {
-        return "ToUser{" +
-                "id=" + id +
-                ", message='" + message + '\'' +
-                '}';
+    public int getToId() {
+        return toId;
+    }
+
+    public void setToId(int toId) {
+        this.toId = toId;
     }
 }
