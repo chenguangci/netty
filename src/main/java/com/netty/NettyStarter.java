@@ -1,4 +1,4 @@
-package com.config;
+package com.netty;
 
 import com.netty.MyWebSocketChannelHandle;
 import io.netty.bootstrap.ServerBootstrap;

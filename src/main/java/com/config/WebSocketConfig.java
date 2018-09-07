@@ -18,8 +18,10 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         //客户端接收服务端消息的地址的前缀信息
-        registry.enableSimpleBroker("/queue","/topic");
+        registry.enableSimpleBroker("/user","/topic");
         //客户端给服务端发消息的地址的前缀
-        registry.setApplicationDestinationPrefixes("/app");
+        registry.setApplicationDestinationPrefixes("/beiyi");
+        //定义一对一推送的时候前缀
+        registry.setUserDestinationPrefix("/user");
     }
 }

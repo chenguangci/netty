@@ -1,14 +1,9 @@
 package com.controller;
 
-import com.sun.corba.se.impl.protocol.giopmsgheaders.RequestMessage;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping
@@ -25,9 +20,9 @@ public class IndexController {
     }
 
     @RequestMapping(value = "/index")
-    public String index(@RequestParam("name")String name, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        session.setAttribute("name", name);
-        return "chat";
+    public ModelAndView index(@RequestParam("name")String name) {
+        ModelAndView view = new ModelAndView("chat");
+        view.addObject("userId", name);
+        return view;
     }
 }
