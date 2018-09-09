@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="/js/sock_js.js"></script>
-    <script src="/js/stomp.js"></script>
-    <script src="/js/update.js"></script>
+    <script src="/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+    <script src="/js/sock_js.js" type="text/javascript"></script>
+    <script src="/js/stomp.js" type="text/javascript"></script>
+    <script src="/js/update.js" type="text/javascript"></script>
     <script type="text/javascript">
         var userId = [[${userId}]];
         if (!window.WebSocket) {
@@ -15,26 +16,28 @@
             var socket = new SockJS('/webSocket'); //1连接SockJS的endpoint是“/webSocket”，与后台代码中注册的 webSocket 要一样。
             stompClient = Stomp.over(socket);//2创建STOMP协议的webSocket客户端。
             stompClient.connect({}, function(frame) {//3连接webSocket的服务端。
-                console.log('开始进行连接Connected: ' + frame);
-                //4通过stompClient.subscribe（）订阅服务器的目标是'/topic/getResponse'发送过来的地址，与@SendTo中的地址对应。
+                //通过stompClient.subscribe（）订阅服务器的目标是'/topic/getResponse'发送过来的地址，与@SendTo中的地址对应。
                 stompClient.subscribe('/topic/getResponse', function(response){
-                    console.log(response);
                     var ta = document.getElementById('responseContext');
                     ta.value += response.body + '\r\n'
                 });
-                //4通过stompClient.subscribe（）订阅服务器的目标是'/user/' + userId + '/msg'接收一对一的推送消息,其中userId由服务端传递过来,用于表示唯一的用户,通过此值将消息精确推送给一个用户
+                //通过stompClient.subscribe（）订阅服务器的目标是'/user/' + userId + '/msg'接收一对一的推送消息,其中userId由服务端传递过来,用于表示唯一的用户,通过此值将消息精确推送给一个用户
                 stompClient.subscribe('/user/' + userId + '/msg', function(response){
                     var ta = document.getElementById('responseContext');
-                    ta.value += response.body + '\r\n'
+                    var msg = $.parseJSON(response.body);
+                    ta.value += 'from ' + msg.fromId + ' : ' + msg.message + '\r\n'
                 });
                 stompClient.subscribe('/topic/server', function(response){
                     var ta = document.getElementById('responseContext');
                     ta.value += response.body + '\r\n'
                 });
-                // stompClient.send("/client/getServerMsg", {});
             });
         } else {
             alert("您的浏览器不支持webSocket")
+        }
+        function sendServerMsg() {
+            var text = $('#serverMsg').val();
+            stompClient.send("/client/getServerMsg", {}, text);
         }
     </script>
 </head>
@@ -46,15 +49,6 @@
     <div id="char_list" style="float: left;">
         <h2>发送消息</h2>
     </div>
-    <!--<div style="float: left;">-->
-        <!--<h2>发送消息</h2>-->
-        <!--<form onsubmit="return false">-->
-            <!--<label>-->
-                <!--<input type="text" name="message" style="height: 60px"><br><br>-->
-            <!--</label>-->
-            <!--<input type="button" value="发送请求消息" onclick="send(this.form.message.value)">-->
-        <!--</form>-->
-    <!--</div>-->
     <div style="padding-left: 600px">
         <h2>
             <label>
@@ -62,6 +56,11 @@
                 <textarea id="responseContext" style="width: 300px; height: 100px"></textarea>
             </label>
         </h2>
+    </div>
+    <div>
+        <h2>发送系统消息</h2>
+        <input type="text" id="serverMsg">
+        <input type="button" value="系统消息" onclick="sendServerMsg()">
     </div>
 </div>
 </body>

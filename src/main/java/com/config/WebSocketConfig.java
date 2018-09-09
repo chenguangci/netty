@@ -1,6 +1,7 @@
 package com.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.AbstractWebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -24,4 +25,14 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
         //定义一对一推送的时候前缀
         registry.setUserDestinationPrefix(WebSocketURLConfig.ONE_TO_ONE);
     }
+
+    /**
+     * 配置客户端入站通道拦截器
+     */
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.interceptors(new UserInterceptor());
+    }
+
+
 }

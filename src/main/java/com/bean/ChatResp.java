@@ -1,6 +1,9 @@
 package com.bean;
 
-public class ChatResp {
+import javax.security.auth.Subject;
+import java.security.Principal;
+
+public class ChatResp implements Principal {
     private String msg;
     private String from;
 
@@ -26,5 +29,15 @@ public class ChatResp {
 
     public void setFrom(String from) {
         this.from = from;
+    }
+
+    @Override
+    public String getName() {
+        return null;
+    }
+
+    @Override
+    public boolean implies(Subject subject) {
+        return false;
     }
 }
