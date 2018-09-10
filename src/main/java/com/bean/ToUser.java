@@ -1,19 +1,23 @@
 package com.bean;
 
+import java.util.Date;
+
 /**
  * 封装消息实体
  */
 public class ToUser {
     private String fromId;
     private String message;
+    private Date time;
     private String toId;
 
     @Override
     public String toString() {
-        return "{" +
-                "fromId:" + fromId +
-                ", message:'" + message + '\'' +
-                ", toId:" + toId +
+        return "ToUser{" +
+                "fromId='" + fromId + '\'' +
+                ", message='" + message + '\'' +
+                ", time=" + time +
+                ", toId='" + toId + '\'' +
                 '}';
     }
 
@@ -39,5 +43,13 @@ public class ToUser {
 
     public void setToId(String toId) {
         this.toId = toId;
+    }
+
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
     }
 }

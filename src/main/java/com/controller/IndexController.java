@@ -31,7 +31,7 @@ public class IndexController {
     @RequestMapping(value = "/index")
     public ModelAndView index(@RequestParam("name")String name, HttpServletRequest request) {
         HttpSession session = request.getSession();
-        session.setAttribute("id", name);
+        session.setAttribute("userId", name);
         ModelAndView view = new ModelAndView("webSocket");
         view.addObject("userId", name);
         return view;
@@ -39,15 +39,15 @@ public class IndexController {
 
     @RequestMapping(value = "/updateList", method = RequestMethod.GET)
     @ResponseBody
-    public Result updateList(@SessionAttribute(value = "id")String id) {
+    public Result updateList(@SessionAttribute(value = "userId")String id) {
         List<ToUser> users = new ArrayList<>();
         for (Map.Entry<String, WebSocketSession> entry : SessionMap.sessionMap.entrySet()) {
-//            if (!id.equals(entry.getKey())) {
+            if (!id.equals(entry.getKey())) {
                 ToUser user = new ToUser();
                 user.setFromId(id);
                 user.setToId((String) entry.getValue().getAttributes().get("userId"));
                 users.add(user);
-//            }
+            }
         }
         return new Result<>(users, true);
     }
