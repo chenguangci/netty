@@ -9,8 +9,17 @@
     <script src="/js/update.js" type="text/javascript"></script>
     <script type="text/javascript">
         var webSocket = null;
-        if ('webSocket' in window) {
-            webSocket = new WebSocket("ws://localhost:8080/webSocket");
+        if ('WebSocket' in window) {
+            //Websocket的连接
+            webSocket = new WebSocket("ws://localhost:8080/webSocket");//WebSocket对应的地址
+        }
+        else if ('MozWebSocket' in window) {
+            //Websocket的连接
+            webSocket = new MozWebSocket("ws://localhost:8080/webSocket");//SockJS对应的地址
+        }
+        else {
+            //SockJS的连接
+            webSocket = new SockJS("ws://localhost:8080/webSocket");    //SockJS对应的地址
         }
         webSocket.onopen = onOpen;
         webSocket.onmessage = onMessage;
@@ -21,6 +30,7 @@
         }
 
         function onMessage(response) {
+            console.log('收到消息');
             var ta = document.getElementById('responseContext');
             console.log(response.data);
             var msg = $.parseJSON(response.data);

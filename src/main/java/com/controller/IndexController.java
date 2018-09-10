@@ -1,25 +1,22 @@
 package com.controller;
 
+import com.bean.SessionMap;
 import com.dto.Result;
-import com.bean.SessionIdMap;
 import com.bean.ToUser;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.socket.WebSocketSession;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping
 public class IndexController {
-
-    @Autowired
-    private SimpUserRegistry registry;
 
     @RequestMapping(value = "/")
     public String login() {
@@ -35,7 +32,6 @@ public class IndexController {
     public ModelAndView index(@RequestParam("name")String name, HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.setAttribute("id", name);
-        SessionIdMap.sessionIds.add(name);
         ModelAndView view = new ModelAndView("webSocket");
         view.addObject("userId", name);
         return view;
@@ -44,13 +40,12 @@ public class IndexController {
     @RequestMapping(value = "/updateList", method = RequestMethod.GET)
     @ResponseBody
     public Result updateList(@SessionAttribute(value = "id")String id) {
-        System.out.println(registry.getUserCount());
         List<ToUser> users = new ArrayList<>();
-        for (String toId : SessionIdMap.sessionIds) {
-//            if (toId != id) {
+        for (Map.Entry<String, WebSocketSession> entry : SessionMap.sessionMap.entrySet()) {
+//            if (!id.equals(entry.getKey())) {
                 ToUser user = new ToUser();
-                user.setToId(toId);
                 user.setFromId(id);
+                user.setToId((String) entry.getValue().getAttributes().get("userId"));
                 users.add(user);
 //            }
         }

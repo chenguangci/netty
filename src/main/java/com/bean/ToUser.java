@@ -10,10 +10,10 @@ public class ToUser {
 
     @Override
     public String toString() {
-        return "ToUser{" +
-                "fromId=" + fromId +
-                ", message='" + message + '\'' +
-                ", toId=" + toId +
+        return "{" +
+                "fromId:" + fromId +
+                ", message:'" + message + '\'' +
+                ", toId:" + toId +
                 '}';
     }
 
