@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+    <script src="/js/sock_js.js" type="text/javascript"></script>
+    <script src="/js/stomp.js" type="text/javascript"></script>
+    <script src="/js/update.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var webSocket = null;
+        if ('webSocket' in window) {
+            webSocket = new WebSocket("ws://localhost:8080/webSocket");
+        }
+        webSocket.onopen = onOpen;
+        webSocket.onmessage = onMessage;
+        webSocket.onerror = onError;
+
+        function onOpen(openEvt) {
+            //alert(openEvt.Data);
+        }
+
+        function onMessage(response) {
+            var ta = document.getElementById('responseContext');
+            console.log(response.data);
+            var msg = $.parseJSON(response.data);
+            ta.value += 'from ' + msg.fromId + ' : ' + msg.message + '\r\n'
+        }
+        function onError() {
+        }
+        function onClose() {
+        }
+
+    </script>
+</head>
+<body>
+<div style="padding-top: 30px">
+    <div>
+        <input type="button" id="open" value="刷新对话列表" onclick="updateList()">
+    </div>
+    <div id="char_list" style="float: left;">
+        <h2>发送消息</h2>
+    </div>
+    <div style="padding-left: 600px">
+        <h2>
+            <label>
+                接收到的消息<br><br>
+                <textarea id="responseContext" style="width: 300px; height: 100px"></textarea>
+            </label>
+        </h2>
+    </div>
+    <div>
+        <h2>发送系统消息</h2>
+        <input type="text" id="serverMsg">
+        <input type="button" value="系统消息" onclick="sendServerMsg()">
+    </div>
+</div>
+</body>
+</html>

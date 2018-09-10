@@ -1,15 +1,16 @@
 package com.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.web.socket.config.annotation.AbstractWebSocketMessageBrokerConfigurer;
-import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
-import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
+
+import org.springframework.web.socket.config.annotation.*;
 
 @Configuration
+@EnableWebSocket
 @EnableWebSocketMessageBroker
-public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
+public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer implements WebSocketConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry stompEndpointRegistry) {
@@ -34,5 +35,14 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
         registration.interceptors(new UserInterceptor());
     }
 
+    @Override
+    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+        registry.addHandler(webSocketHandler(), WebSocketURLConfig.END_POINT)
+                .addInterceptors(new SessionInterceptor());
+    }
 
+    @Bean
+    public WebSocketHandler webSocketHandler() {
+        return new WebSocketHandler();
+    }
 }

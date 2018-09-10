@@ -4,9 +4,9 @@ package com.bean;
  * 封装消息实体
  */
 public class ToUser {
-    private int fromId;
+    private String fromId;
     private String message;
-    private int toId;
+    private String toId;
 
     @Override
     public String toString() {
@@ -17,11 +17,11 @@ public class ToUser {
                 '}';
     }
 
-    public int getFromId() {
+    public String getFromId() {
         return fromId;
     }
 
-    public void setFromId(int fromId) {
+    public void setFromId(String fromId) {
         this.fromId = fromId;
     }
 
@@ -33,11 +33,11 @@ public class ToUser {
         this.message = message;
     }
 
-    public int getToId() {
+    public String getToId() {
         return toId;
     }
 
-    public void setToId(int toId) {
+    public void setToId(String toId) {
         this.toId = toId;
     }
 }

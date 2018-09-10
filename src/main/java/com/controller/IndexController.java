@@ -28,25 +28,25 @@ public class IndexController {
 
     @RequestMapping(value = "/test")
     public String test() {
-        return "index";
+        return "webSocket";
     }
 
     @RequestMapping(value = "/index")
     public ModelAndView index(@RequestParam("name")String name, HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.setAttribute("id", name);
-        SessionIdMap.sessionIds.add(Integer.valueOf(name));
-        ModelAndView view = new ModelAndView("chat");
+        SessionIdMap.sessionIds.add(name);
+        ModelAndView view = new ModelAndView("webSocket");
         view.addObject("userId", name);
         return view;
     }
 
     @RequestMapping(value = "/updateList", method = RequestMethod.GET)
     @ResponseBody
-    public Result updateList(@SessionAttribute(value = "id")int id) {
+    public Result updateList(@SessionAttribute(value = "id")String id) {
         System.out.println(registry.getUserCount());
         List<ToUser> users = new ArrayList<>();
-        for (int toId : SessionIdMap.sessionIds) {
+        for (String toId : SessionIdMap.sessionIds) {
 //            if (toId != id) {
                 ToUser user = new ToUser();
                 user.setToId(toId);

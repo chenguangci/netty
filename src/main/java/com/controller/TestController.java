@@ -1,13 +1,14 @@
 package com.controller;
 
 import com.bean.ToUser;
+import com.config.WebSocketHandler;
 import com.config.WebSocketURLConfig;
 import com.service.MessageManagement;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -19,13 +20,18 @@ public class TestController {
     @Autowired
     private MessageManagement management;
 
+    @Bean // 这个注解会从Spring容器拿出Bean
+    public WebSocketHandler infoHandler() {
+        return new WebSocketHandler();
+    }
+
+
     @MessageMapping("/sendMsg")
     @SendTo(WebSocketURLConfig.RECEIVE_SERVER + "/getResponse")
     public void greeting(ToUser user) {
         //处理消息
-        management.test();
         System.out.println("接收到的消息" + user.toString());
-        this.messagingTemplate.convertAndSendToUser(String.valueOf(user.getToId()), "/msg", user);
+        this.messagingTemplate.convertAndSendToUser(user.getToId(), "/msg", user);
     }
 
     /**

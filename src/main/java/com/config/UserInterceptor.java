@@ -12,20 +12,17 @@ import java.util.Map;
 public class UserInterceptor implements ChannelInterceptor {
 
 
+
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
 
         StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
         if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-            Map<String, Object> map = accessor.getSessionAttributes();
-            for (Map.Entry<String, Object> entry : map.entrySet()) {
-                System.out.println(entry.getKey() + " " + entry.getValue());
-            }
+
         }
         if (StompCommand.DISCONNECT.equals(accessor.getCommand())) {
             //移除连接
             System.out.println("用户下线");
-
         }
         return message;
     }

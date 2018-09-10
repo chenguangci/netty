@@ -24,6 +24,6 @@ function updateList() {
  */
 function send(fromId, id, toId) {
     var message = document.getElementById(id);
-    stompClient.send("/client/sendMsg", {}, JSON.stringify({'fromId' : fromId, 'message' : message.value, 'toId' : toId }));
+    webSocket.send(JSON.stringify({'fromId' : fromId.toString(), 'message' : message.value, 'toId' : toId.toString() }));
     message.value = ''
 }
