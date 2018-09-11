@@ -11,7 +11,7 @@ public interface WebSocketService {
     /**
      * 添加session
      */
-    void addSession(WebSocketSession session);
+    void addSession(WebSocketSession session) throws IOException;
 
     /**
      * 移除session
@@ -21,11 +21,11 @@ public interface WebSocketService {
     /**
      * 发送消息给指定用户
      */
-    void sendToUser(ToUser user, WebSocketSession session, TextMessage message) throws IOException;
+    void sendToUser(ToUser user, WebSocketSession session) throws IOException;
 
     /**
      * 发送消息给所有用户
      */
-    void sendToAllUsers(TextMessage message) throws IOException;
+    void sendToAllUsers(ToUser user) throws IOException;
 
 }

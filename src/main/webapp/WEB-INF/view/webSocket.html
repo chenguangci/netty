@@ -34,7 +34,7 @@
             var ta = document.getElementById('responseContext');
             console.log(response.data);
             var msg = $.parseJSON(response.data);
-            ta.value += 'from ' + msg.fromId + ' : ' + msg.message + '\r\n'
+            ta.value += 'from ' + msg.fromId + ' ' + msg.time + '\n' + msg.message + '\n'
         }
         function onError() {
         }

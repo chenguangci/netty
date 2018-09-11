@@ -1,5 +1,5 @@
 package com.config;
 
 public class SystemConfig {
-    public static String adminId = "0000";
+    public static final String adminId = "0000";
 }

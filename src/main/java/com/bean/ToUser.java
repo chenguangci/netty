@@ -8,8 +8,9 @@ import java.util.Date;
 public class ToUser {
     private String fromId;
     private String message;
-    private Date time;
+    private String time;
     private String toId;
+    private boolean isRead;
 
     @Override
     public String toString() {
@@ -18,6 +19,7 @@ public class ToUser {
                 ", message='" + message + '\'' +
                 ", time=" + time +
                 ", toId='" + toId + '\'' +
+                ", isRead=" + isRead +
                 '}';
     }
 
@@ -45,11 +47,19 @@ public class ToUser {
         this.toId = toId;
     }
 
-    public Date getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(Date time) {
+    public void setTime(String time) {
         this.time = time;
+    }
+
+    public boolean isRead() {
+        return isRead;
+    }
+
+    public void setRead(boolean read) {
+        isRead = read;
     }
 }
